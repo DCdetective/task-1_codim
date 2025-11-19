@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Save User — Form</title>
+
+  <!-- static CSS -->
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="header">
+        <div class="logo">U</div>
+        <div>
+          <div class="title">User Details</div>
+          <div class="subtitle">Enter details and click Save. Phone & Email must be unique.</div>
+        </div>
+      </div>
+
+      {% if error %}
+        <div class="alert alert-error">{{ error }}</div>
+      {% endif %}
+
+      {% if success %}
+        <div class="alert alert-success">{{ success }}</div>
+      {% endif %}
+
+      <form method="post" action="/save">
+        <div class="form-grid">
+          <div class="form-row">
+            <label for="name">Name</label>
+            <input class="input" id="name" name="name" required />
+          </div>
+
+          <div class="form-row">
+            <label for="phone">Phone</label>
+            <input class="input" id="phone" name="phone" required pattern="[0-9+\-\s()]{7,20}" />
+          </div>
+
+          <div class="form-row">
+            <label for="email">Email</label>
+            <input class="input" type="email" id="email" name="email" required />
+          </div>
+
+          <div class="form-row">
+            <label for="age">Age</label>
+            <input class="input" id="age" name="age" type="number" min="0" max="130" required />
+          </div>
+
+          <div class="form-row col-span-2">
+            <label for="date">Date</label>
+            <input class="input" id="date" name="date" type="date" required />
+          </div>
+
+          <div class="form-row col-span-2">
+            <label for="time">Time</label>
+            <input class="input" id="time" name="time" type="time" required />
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="btn btn-primary" type="submit">Save</button>
+          <button class="btn btn-ghost" type="reset">Reset</button>
+        </div>
+
+        <p class="helper">Tip: use the Swagger UI at <code>/docs</code> for API testing.</p>
+      </form>
+    </div>
+  </div>
+</body>
+</html>
