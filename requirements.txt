@@ -3,5 +3,4 @@ uvicorn
 sqlalchemy
 pydantic
 jinja2
-python-multipart
-pydantic[email]
+python-multipar

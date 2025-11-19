@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #ecf0f1;
+        }
+
+        .topbar {
+            background: #2c3e50;
+            padding: 15px 25px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .topbar h2 {
+            margin: 0;
+        }
+
+        .logout-btn {
+            background: #e74c3c;
+            padding: 8px 14px;
+            border-radius: 6px;
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+        }
+
+        .logout-btn:hover {
+            background: #c0392b;
+        }
+
+        .container {
+            margin: 25px auto;
+            width: 90%;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0px 4px 25px rgba(0,0,0,0.07);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #3498db;
+            color: white;
+            padding: 12px;
+            font-size: 15px;
+        }
+
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #ecf0f1;
+            font-size: 14px;
+            color: #2c3e50;
+        }
+
+        tr:hover {
+            background: #f2f6ff;
+        }
+
+        .empty {
+            text-align: center;
+            color: #7f8c8d;
+            padding: 15px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="topbar">
+        <h2>Admin Dashboard</h2>
+        <a class="logout-btn" href="/admin/logout">Logout</a>
+    </div>
+
+    <div class="container">
+
+        {% if users|length == 0 %}
+            <p class="empty">No meeting records found.</p>
+        {% else %}
+        
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Age</th>
+                <th>Date</th>
+                <th>Time</th>
+            </tr>
+
+            {% for u in users %}
+            <tr>
+                <td>{{ u.id }}</td>
+                <td>{{ u.name }}</td>
+                <td>{{ u.phone }}</td>
+                <td>{{ u.email }}</td>
+                <td>{{ u.age }}</td>
+                <td>{{ u.date }}</td>
+                <td>{{ u.time }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        {% endif %}
+    </div>
+
+</body>
+</html>

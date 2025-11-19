@@ -7,6 +7,10 @@ from fastapi.staticfiles import StaticFiles
 from database import Base, engine, SessionLocal
 from models import User
 from schemas import UserCreate, UserResponse
+from fastapi.responses import RedirectResponse
+
+ADMIN_USERNAME = "admin"
+ADMIN_PASSWORD = "1234"
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -72,3 +76,59 @@ def create_user(
         "request": request,
         "success": f"User {name} saved successfully!"
     })
+    
+    
+@app.get("/admin/login", response_class=HTMLResponse)
+def admin_login_page(request: Request):
+    return templates.TemplateResponse("admin_login.html", {"request": request})
+
+@app.post("/admin/login", response_class=HTMLResponse)
+def admin_login(
+    request: Request,
+    username: str = Form(...),
+    password: str = Form(...)
+):
+    if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
+
+        response = RedirectResponse(url="/admin", status_code=302)
+        response.set_cookie(key="admin_auth", value="true")
+        return response
+
+    return templates.TemplateResponse("admin_login.html", {
+        "request": request,
+        "error": "Invalid username or password"
+    })
+    
+    
+    
+    
+def is_admin_authenticated(request: Request):
+    return request.cookies.get("admin_auth") == "true"
+
+
+
+
+@app.get("/admin", response_class=HTMLResponse)
+def admin_dashboard(request: Request, db: Session = Depends(get_db)):
+
+    if not is_admin_authenticated(request):
+        return RedirectResponse(url="/admin/login", status_code=302)
+
+    users = db.query(User).all()
+
+    return templates.TemplateResponse("admin_dashboard.html", {
+        "request": request,
+        "users": users
+    })
+    
+    
+
+
+# ------------------------------------
+# ADMIN LOGOUT
+# ------------------------------------
+@app.get("/admin/logout")
+def admin_logout():
+    response = RedirectResponse(url="/admin/login", status_code=302)
+    response.delete_cookie("admin_auth")
+    return response
